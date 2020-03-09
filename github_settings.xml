@@ -1,7 +1,8 @@
 <application>
   <component name="GithubSettings">
-    <option name="LOGIN" value="andrei_terziev@abv.bg" />
-    <option name="HOST" value="https://github.com/gazeto100/test" />
+    <option name="LOGIN" value="gazeto100" />
+    <option name="HOST" value="https://github.com/gazeto100/Poker.git" />
     <option name="AUTH_TYPE" value="BASIC" />
+    <option name="CONNECTION_TIMEOUT" value="10000" />
   </component>
 </application>
