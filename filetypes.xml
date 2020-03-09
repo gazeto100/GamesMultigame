@@ -1,0 +1,9 @@
+<application>
+  <component name="FileTypeManager" version="17">
+    <extensionMap>
+      <mapping pattern="roundshape.xml" type="PLAIN_TEXT" />
+      <mapping pattern="roundshape" type="PLAIN_TEXT" />
+      <mapping pattern="popup_menu" type="XML" />
+    </extensionMap>
+  </component>
+</application>
