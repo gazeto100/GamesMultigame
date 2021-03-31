@@ -12,6 +12,6 @@
         </UrlAndUserName>
       </list>
     </option>
-    <option name="cloneParentDir" value="$USER_HOME$/workspace/budjet" />
+    <option name="cloneParentDir" value="$USER_HOME$/workspace" />
   </component>
 </application>
