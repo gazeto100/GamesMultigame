@@ -1,9 +1,12 @@
 package com.andy.gamesmultigame;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -75,8 +78,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
         if(v.getId() == btnDeal.getId()){
             Log.d("D1", "HHHHHHHHHH");
-            finish();
-            startActivity(getIntent());
+
+            updateGame();
         }
         for (int i = 0; i < btnCoins.length; i++){
             if (v.getId() == btnCoins[i].getId()){
@@ -84,7 +87,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
                 iBet = coinValue[i];
                 iTotalBet += iBet;
-
+                coin.add(btnCoins[i]);
                 iCredit = iCredit-iBet;
                 txtBet.setText(String.valueOf(iTotalBet));
                 txtCredit.setText(String.valueOf(iCredit));
@@ -92,4 +95,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
             }
         }
     }
+    public void updateGame(){
+
+    }
+
 }
