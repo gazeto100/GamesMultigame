@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">GamesMultigame</string>
+    <string name="credit">0</string>
+    <string name="bet">0</string>
+    <string name="coin1">TODO</string>
+    <string name="coin5">TODO</string>
+    <string name="coin10">TODO</string>
+    <string name="coin25">TODO</string>
+    <string name="coin100">TODO</string>
+    <string name="rules">TODO</string>
+    <string name="dbet">TODO</string>
+    <string name="dcredit">TODO</string>
+</resources>
