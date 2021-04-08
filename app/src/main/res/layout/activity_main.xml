@@ -39,8 +39,10 @@
         android:src="@drawable/nadpis"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.498" />
 
     <ImageView
         android:id="@+id/coin1"
@@ -268,29 +270,31 @@
 
     <TextView
         android:id="@+id/txtcredit"
-        android:layout_width="114dp"
-        android:layout_height="35dp"
+        android:layout_width="118dp"
+        android:layout_height="60dp"
+        android:gravity="center"
         android:text="@string/credit"
         app:layout_constraintBottom_toBottomOf="@+id/credit"
         app:layout_constraintEnd_toEndOf="@+id/credit"
-        app:layout_constraintHorizontal_bias="0.547"
+        app:layout_constraintHorizontal_bias="0.675"
         app:layout_constraintStart_toStartOf="@+id/credit"
         app:layout_constraintTop_toTopOf="@+id/credit"
-        app:layout_constraintVertical_bias="0.538" />
+        app:layout_constraintVertical_bias="0.500" />
 
     <TextView
         android:id="@+id/txtbet"
-        android:layout_width="114dp"
-        android:layout_height="35dp"
+        android:layout_width="118dp"
+        android:layout_height="60dp"
         android:layout_marginLeft="40dp"
         android:layout_marginStart="40dp"
+        android:gravity="center"
         android:text="@string/bet"
         app:layout_constraintBottom_toBottomOf="@+id/bet"
         app:layout_constraintEnd_toEndOf="@+id/bet"
-        app:layout_constraintHorizontal_bias="0.045"
+        app:layout_constraintHorizontal_bias="0.05"
         app:layout_constraintStart_toEndOf="@+id/credit"
         app:layout_constraintTop_toTopOf="@+id/bet"
-        app:layout_constraintVertical_bias="0.538" />
+        app:layout_constraintVertical_bias="0.500" />
 
     <TextView
         android:id="@+id/txtDilarPoint"
@@ -311,5 +315,26 @@
         android:layout_marginStart="16dp"
         app:layout_constraintBottom_toBottomOf="@+id/player1"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/imgTextlost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/lost"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/rules"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start New Game"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.847" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

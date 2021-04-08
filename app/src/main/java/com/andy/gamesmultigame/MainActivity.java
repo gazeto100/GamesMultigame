@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,11 +24,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
     TextView txtCredit, txtBet, txtDilarPoint, txtPlayerPoint;
     ImageView btnDeal, btnHit, btnStand, btnDouble;
 
-    ImageView p1,p2,p3,p4,p5;
+    ImageView imgTextLost, imgTextWon;
 
     ImageView[] btnCoins = new ImageView[5];
 
     int coinValue[] = {1, 5, 10, 25, 100};
+
+    Button startGame;
 
     int iCredit, iBet, iTotalBet, iDilarPoint, iPlayerPoint;
 
@@ -72,6 +75,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 
         isDeal = false;
+
+        startGame = (Button)findViewById(R.id.btnStart);
+        startGame.setVisibility(View.INVISIBLE);
+        startGame.setOnClickListener(this);
 
         for (int i = 0; i<point.length; i++) {
             cardsAndPoint.put(cards[i], point[i]);
@@ -118,6 +125,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         txtPlayerPoint.setTextSize(20);
         txtPlayerPoint.setVisibility(View.INVISIBLE);
 
+        imgTextLost = (ImageView) findViewById(R.id.imgTextlost);
+        imgTextLost.setVisibility(View.INVISIBLE);
 
         btnDeal = (ImageView) findViewById(R.id.btnDeal);
         btnHit = (ImageView) findViewById(R.id.btnHit);
@@ -147,27 +156,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
 
-        if (iCredit != 0){
-            btnDeal.setVisibility(View.VISIBLE);
-
-        }
-        if(v.getId() == btnDeal.getId()){
-            isDeal = true;
-            updateGame();
-            btnHit.setVisibility(View.VISIBLE);
-            btnDouble.setVisibility(View.VISIBLE);
-            btnStand.setVisibility(View.VISIBLE);
-        }
-        if(v.getId() == btnHit.getId()){
-
-
-
-        }
         if(!isDeal) {
             for (int i = 0; i < btnCoins.length; i++) {
                 if (v.getId() == btnCoins[i].getId()) {
-                    Log.d("D1", String.valueOf(btnCoins[i].getId()));
-
                     iBet = coinValue[i];
                     iTotalBet += iBet;
                     coin.add(btnCoins[i]);
@@ -177,6 +168,38 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     coin.add(btnCoins[i]);
                 }
             }
+            btnDeal.setVisibility(View.VISIBLE);
+        }
+
+        if(v.getId() == btnDeal.getId()){
+            isDeal = true;
+            updateGame();
+            btnHit.setVisibility(View.VISIBLE);
+            btnDouble.setVisibility(View.VISIBLE);
+            btnStand.setVisibility(View.VISIBLE);
+        }
+        if(v.getId() == btnHit.getId()){
+
+            int randomIndex = new Random().nextInt(cardsAndPoint.size());
+
+            int size = playerCards.size();
+
+            playerCards.add(cards[randomIndex]);
+            playerPoints.add(point[randomIndex]);
+            iPlayerPoint += point[randomIndex];
+
+            PlayrCardsView[size].setImageResource(playerCards.get(size));
+            txtPlayerPoint.setText(String.valueOf(iPlayerPoint));
+
+            cardsAndPoint.remove(cards[randomIndex]);
+
+            clearAllUp21();
+
+        }
+
+        if (v.getId() == startGame.getId()){
+            StartNewGame();
+            startGame.setVisibility(View.INVISIBLE);
         }
     }
     public void updateGame(){
@@ -214,6 +237,58 @@ public class MainActivity extends Activity implements View.OnClickListener {
             txtPlayerPoint.setText(String.valueOf(iPlayerPoint));
         }
 
+    }
+
+    public void clearAllUp21(){
+        if (iPlayerPoint > 21){
+            btnHit.setVisibility(View.INVISIBLE);
+            btnStand.setVisibility(View.INVISIBLE);
+            btnDouble.setVisibility(View.INVISIBLE);
+
+            iBet = 0;
+            iTotalBet = 0;
+            txtBet.setText(String.valueOf(iBet));
+
+            imgTextLost.setVisibility(View.VISIBLE);
+
+            startGame.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void StartNewGame(){
+
+        btnHit.setVisibility(View.INVISIBLE);
+        btnStand.setVisibility(View.INVISIBLE);
+        btnDouble.setVisibility(View.INVISIBLE);
+        //btnDeal.setVisibility(View.INVISIBLE);
+        isDeal = false;
+
+        playerCards.clear();
+        playerPoints.clear();
+        iPlayerPoint = 0;
+        txtPlayerPoint.setVisibility(View.INVISIBLE);
+
+        iTotalBet = 0;
+        iBet = 0;
+        txtBet.setText(String.valueOf(iBet));
+
+        dilarCards.clear();
+        dilarPoints.clear();
+        iDilarPoint = 0;
+        txtDilarPoint.setVisibility(View.INVISIBLE);
+
+        cardsAndPoint.clear();
+
+        imgTextLost.setVisibility(View.INVISIBLE);
+
+        for (int i = 0; i < PlayrCardsView.length; i++){
+            PlayrCardsView[i].setImageResource(0);
+            DilarCardsView[i].setImageResource(0);
+        }
+
+        for (int i = 0; i<point.length; i++) {
+            cardsAndPoint.put(cards[i], point[i]);
+        }
     }
 
 }
