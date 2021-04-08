@@ -1,4 +1,9 @@
 <application>
+  <component name="GithubAccounts">
+    <account id="e9bf5f7c-c988-49b6-8c10-13f58b3007af" name="gazeto100">
+      <server host="github.com" />
+    </account>
+  </component>
   <component name="GithubSettings">
     <option name="LOGIN" value="gazeto100" />
     <option name="HOST" value="https://github.com/gazeto100/Poker.git" />
