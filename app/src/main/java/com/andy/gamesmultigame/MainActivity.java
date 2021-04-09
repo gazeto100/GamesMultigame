@@ -1,7 +1,9 @@
 package com.andy.gamesmultigame;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,25 +57,28 @@ public class MainActivity extends Activity implements View.OnClickListener {
     Vector<ImageView> coin = new Vector<ImageView>();
 
 
-    ImageView[] PlayrCardsView = new ImageView[5];
+    ImageView[] PlayrCardsView = new ImageView[7];
     Vector<Integer> playerCards = new Vector<Integer>();
     Vector<Integer> playerPoints = new Vector<Integer>();
 
-    ImageView[] DilarCardsView = new ImageView[5];
+    ImageView[] DilarCardsView = new ImageView[7];
     Vector<Integer> dilarCards = new Vector<Integer>();
     Vector<Integer> dilarPoints = new Vector<Integer>();
 
 
+    enum Level {
+        WIN,
+        LOST,
+
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        // Set No Title
-        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
 
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+        decorView.setSystemUiVisibility(uiOptions);
 
         isDeal = false;
 
@@ -90,12 +96,16 @@ public class MainActivity extends Activity implements View.OnClickListener {
         PlayrCardsView[2] = (ImageView) findViewById(R.id.player3);
         PlayrCardsView[3] = (ImageView) findViewById(R.id.player4);
         PlayrCardsView[4] = (ImageView) findViewById(R.id.player5);
+        PlayrCardsView[5] = (ImageView) findViewById(R.id.player6);
+        PlayrCardsView[6] = (ImageView) findViewById(R.id.player7);
 
         DilarCardsView[0] = (ImageView) findViewById(R.id.dealer1);
         DilarCardsView[1] = (ImageView) findViewById(R.id.dealer2);
         DilarCardsView[2] = (ImageView) findViewById(R.id.dealer3);
         DilarCardsView[3] = (ImageView) findViewById(R.id.dealer4);
         DilarCardsView[4] = (ImageView) findViewById(R.id.dealer5);
+        DilarCardsView[5] = (ImageView) findViewById(R.id.dealer6);
+        DilarCardsView[6] = (ImageView) findViewById(R.id.dealer7);
 
         iCredit = 1000;
 
@@ -157,8 +167,16 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public void onClick(View v) {
 
         if(!isDeal) {
+            boolean bNoMoney = false;
             for (int i = 0; i < btnCoins.length; i++) {
                 if (v.getId() == btnCoins[i].getId()) {
+
+                    if (iCredit - coinValue[i] < 0 ){
+                        Toast.makeText(getApplicationContext(), "No Money", Toast.LENGTH_SHORT).show();
+                        bNoMoney = true;
+                        break;
+                    }
+
                     iBet = coinValue[i];
                     iTotalBet += iBet;
                     coin.add(btnCoins[i]);
@@ -168,7 +186,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
                     coin.add(btnCoins[i]);
                 }
             }
-            btnDeal.setVisibility(View.VISIBLE);
+            if (!bNoMoney) {
+                btnDeal.setVisibility(View.VISIBLE);
+            }
         }
 
         if(v.getId() == btnDeal.getId()){
@@ -177,24 +197,19 @@ public class MainActivity extends Activity implements View.OnClickListener {
             btnHit.setVisibility(View.VISIBLE);
             btnDouble.setVisibility(View.VISIBLE);
             btnStand.setVisibility(View.VISIBLE);
+            for (ImageView i: btnCoins){
+                i.setVisibility(View.INVISIBLE);
+            }
         }
         if(v.getId() == btnHit.getId()){
 
-            int randomIndex = new Random().nextInt(cardsAndPoint.size());
-
-            int size = playerCards.size();
-
-            playerCards.add(cards[randomIndex]);
-            playerPoints.add(point[randomIndex]);
-            iPlayerPoint += point[randomIndex];
-
-            PlayrCardsView[size].setImageResource(playerCards.get(size));
-            txtPlayerPoint.setText(String.valueOf(iPlayerPoint));
-
-            cardsAndPoint.remove(cards[randomIndex]);
-
+            HitLog();
             clearAllUp21();
 
+        }
+
+        if (v.getId() == btnStand.getId()){
+            StandLogic();
         }
 
         if (v.getId() == startGame.getId()){
@@ -202,6 +217,28 @@ public class MainActivity extends Activity implements View.OnClickListener {
             startGame.setVisibility(View.INVISIBLE);
         }
     }
+
+
+    public void HitLog(){
+
+        int randomIndex = new Random().nextInt(cardsAndPoint.size());
+
+        int size = playerCards.size();
+
+        playerCards.add(cards[randomIndex]);
+        playerPoints.add(point[randomIndex]);
+        iPlayerPoint += point[randomIndex];
+
+        PlayrCardsView[size].setImageResource(playerCards.get(size));
+        txtPlayerPoint.setText(String.valueOf(iPlayerPoint));
+
+        cardsAndPoint.remove(cards[randomIndex]);
+
+
+    }
+
+
+
     public void updateGame(){
 
         if (isDeal) {
@@ -249,9 +286,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
             iTotalBet = 0;
             txtBet.setText(String.valueOf(iBet));
 
+            imgTextLost.setImageResource(R.drawable.lost);
             imgTextLost.setVisibility(View.VISIBLE);
 
             startGame.setVisibility(View.VISIBLE);
+
+            int randomIndex = new Random().nextInt(cardsAndPoint.size());
+            dilarPoints.add(point[randomIndex]);
+            iDilarPoint += point[randomIndex];
+            dilarCards.add(cards[randomIndex]);
+            DilarCardsView[1].setImageResource(dilarCards.get(1));
+            txtDilarPoint.setText(String.valueOf(iDilarPoint));
         }
     }
 
@@ -263,11 +308,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
         //btnDeal.setVisibility(View.INVISIBLE);
         isDeal = false;
 
+
         playerCards.clear();
         playerPoints.clear();
         iPlayerPoint = 0;
         txtPlayerPoint.setVisibility(View.INVISIBLE);
 
+        txtCredit.setText(String.valueOf(iCredit));
         iTotalBet = 0;
         iBet = 0;
         txtBet.setText(String.valueOf(iBet));
@@ -289,6 +336,48 @@ public class MainActivity extends Activity implements View.OnClickListener {
         for (int i = 0; i<point.length; i++) {
             cardsAndPoint.put(cards[i], point[i]);
         }
+
+        for (ImageView i: btnCoins){
+            i.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void StandLogic(){
+        int count = 1;
+        while (iDilarPoint<17){
+            int randomIndex = new Random().nextInt(cardsAndPoint.size());
+            dilarPoints.add(point[randomIndex]);
+            iDilarPoint += point[randomIndex];
+            dilarCards.add(cards[randomIndex]);
+            DilarCardsView[count].setImageResource(dilarCards.get(count));
+            count++;
+        }
+        txtDilarPoint.setText(String.valueOf(iDilarPoint));
+
+        if(iDilarPoint > iPlayerPoint && iDilarPoint <= 21){
+            imgTextLost.setImageResource(R.drawable.lost);
+            imgTextLost.setVisibility(View.VISIBLE);
+        }else if(iDilarPoint < iPlayerPoint){
+            imgTextLost.setImageResource(R.drawable.won);
+            imgTextLost.setVisibility(View.VISIBLE);
+            iCredit = iCredit+iTotalBet*2;
+        }else if(iDilarPoint == iPlayerPoint){
+            imgTextLost.setImageResource(R.drawable.pushed);
+            imgTextLost.setVisibility(View.VISIBLE);
+            iCredit = iCredit+iTotalBet;
+        }else if (iDilarPoint > 21){
+            imgTextLost.setImageResource(R.drawable.won);
+            imgTextLost.setVisibility(View.VISIBLE);
+            iCredit = iCredit+iTotalBet*2;
+        }else if (iPlayerPoint == 21 && iDilarPoint != 21){
+            imgTextLost.setImageResource(R.drawable.won);
+            imgTextLost.setVisibility(View.VISIBLE);
+            iCredit = iCredit+iTotalBet*2;
+        }
+        startGame.setVisibility(View.VISIBLE);
+        btnDouble.setVisibility(View.INVISIBLE);
+        btnHit.setVisibility(View.INVISIBLE);
+        btnStand.setVisibility(View.INVISIBLE);
     }
 
 }
