@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -65,12 +67,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
     Vector<Integer> dilarCards = new Vector<Integer>();
     Vector<Integer> dilarPoints = new Vector<Integer>();
 
+    private CountDownTimer countDownTimer;
 
-    enum Level {
-        WIN,
-        LOST,
+    private static final long START_TIME_IN_MILLIS = 600000;
+    private long mTimeLeftMillis = START_TIME_IN_MILLIS;
 
-    }
+    private boolean mTimerRunning;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +82,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
         View decorView = getWindow().getDecorView();
         int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
         decorView.setSystemUiVisibility(uiOptions);
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
 
         isDeal = false;
 
@@ -143,6 +151,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
         btnStand  = (ImageView) findViewById(R.id.btnStand);
         btnDouble  = (ImageView) findViewById(R.id.btnDouble);
 
+        float xB = (float)(width/2);
+        btnDeal.setX(xB-72);
+        btnStand.setX(xB-72);
+
+
         btnHit.setOnClickListener(this);
         btnHit.setVisibility(View.INVISIBLE);
 
@@ -194,6 +207,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         if(v.getId() == btnDeal.getId()){
             isDeal = true;
             updateGame();
+            //startTimer();
             btnHit.setVisibility(View.VISIBLE);
             btnDouble.setVisibility(View.VISIBLE);
             btnStand.setVisibility(View.VISIBLE);
@@ -216,6 +230,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             StartNewGame();
             startGame.setVisibility(View.INVISIBLE);
         }
+        //updateCountDownText();
     }
 
 
@@ -378,6 +393,34 @@ public class MainActivity extends Activity implements View.OnClickListener {
         btnDouble.setVisibility(View.INVISIBLE);
         btnHit.setVisibility(View.INVISIBLE);
         btnStand.setVisibility(View.INVISIBLE);
+    }
+
+
+    private void startTimer(){
+
+        countDownTimer = new CountDownTimer(mTimeLeftMillis, 30) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+                mTimeLeftMillis = millisUntilFinished;
+                updateCountDownText();
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        }.start();
+        mTimerRunning = true;
+    }
+
+    private void updateCountDownText(){
+     //   int minutes = (int) mTimeLeftMillis / 1000 / 60;
+     //   int seconds = (int) mTimeLeftMillis / 1000 % 60;
+
+        float intX = PlayrCardsView[0].getX();
+        intX += 20;
+        PlayrCardsView[0].setX(intX);
     }
 
 }
