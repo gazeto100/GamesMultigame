@@ -26,7 +26,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     Map<Integer, Integer> cardsAndPoint = new HashMap<Integer, Integer>();
 
-    TextView txtCredit, txtBet, txtDilarPoint, txtPlayerPoint;
+    TextView txtCredit, txtBet, txtDilarPoint, txtPlayerPoint, txtWin;
     ImageView btnDeal, btnHit, btnStand, btnDouble;
 
     ImageView imgTextLost, imgTextWon;
@@ -143,6 +143,11 @@ public class MainActivity extends Activity implements View.OnClickListener {
         txtPlayerPoint.setTextSize(20);
         txtPlayerPoint.setVisibility(View.INVISIBLE);
 
+        txtWin = (TextView)findViewById(R.id.txtWin);
+        txtWin.setTextColor(Color.RED);
+        txtWin.setTextSize(40);
+        txtWin.setVisibility(View.INVISIBLE);
+
         imgTextLost = (ImageView) findViewById(R.id.imgTextlost);
         imgTextLost.setVisibility(View.INVISIBLE);
 
@@ -154,7 +159,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         float xB = (float)(width/2);
         btnDeal.setX(xB-72);
         btnStand.setX(xB-72);
-
 
         btnHit.setOnClickListener(this);
         btnHit.setVisibility(View.INVISIBLE);
@@ -277,7 +281,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
             }
 
             DilarCardsView[0].setImageResource(dilarCards.get(0));
-            DilarCardsView[1].setImageResource(R.drawable.backcard);
+            //DilarCardsView[1].setImageResource(R.drawable.backcard);
+
+            BlackJack();
 
             btnDeal.setVisibility(View.INVISIBLE);
 
@@ -287,6 +293,29 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
             txtPlayerPoint.setVisibility(View.VISIBLE);
             txtPlayerPoint.setText(String.valueOf(iPlayerPoint));
+        }
+
+    }
+
+    public void BlackJack(){
+        if (iPlayerPoint == 21 && iDilarPoint < 21){
+            int randomIndex = new Random().nextInt(cardsAndPoint.size());
+
+            dilarCards.add(cards[randomIndex]);
+            dilarPoints.add(point[randomIndex]);
+            iDilarPoint += dilarPoints.get(1);
+
+            DilarCardsView[1].setImageResource(dilarCards.get(1));
+            cardsAndPoint.remove(cards[randomIndex]);
+
+            imgTextLost.setVisibility(View.VISIBLE);
+            imgTextLost.setImageResource(R.drawable.blackjacktext);
+
+
+
+            btnStand.setVisibility(View.INVISIBLE);
+            btnHit.setVisibility(View.INVISIBLE);
+            btnDouble.setVisibility(View.INVISIBLE);
         }
 
     }
@@ -339,6 +368,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
         iDilarPoint = 0;
         txtDilarPoint.setVisibility(View.INVISIBLE);
 
+        txtWin.setVisibility(View.INVISIBLE);
+
         cardsAndPoint.clear();
 
         imgTextLost.setVisibility(View.INVISIBLE);
@@ -347,6 +378,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
             PlayrCardsView[i].setImageResource(0);
             DilarCardsView[i].setImageResource(0);
         }
+
+        cardsAndPoint.clear();
 
         for (int i = 0; i<point.length; i++) {
             cardsAndPoint.put(cards[i], point[i]);
@@ -366,6 +399,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
             dilarCards.add(cards[randomIndex]);
             DilarCardsView[count].setImageResource(dilarCards.get(count));
             count++;
+            cardsAndPoint.remove(cards[randomIndex]);
         }
         txtDilarPoint.setText(String.valueOf(iDilarPoint));
 
@@ -376,6 +410,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
             imgTextLost.setImageResource(R.drawable.won);
             imgTextLost.setVisibility(View.VISIBLE);
             iCredit = iCredit+iTotalBet*2;
+            txtWin.setText(String.valueOf(iTotalBet*2));
+            txtWin.setVisibility(View.VISIBLE);
         }else if(iDilarPoint == iPlayerPoint){
             imgTextLost.setImageResource(R.drawable.pushed);
             imgTextLost.setVisibility(View.VISIBLE);
@@ -384,10 +420,15 @@ public class MainActivity extends Activity implements View.OnClickListener {
             imgTextLost.setImageResource(R.drawable.won);
             imgTextLost.setVisibility(View.VISIBLE);
             iCredit = iCredit+iTotalBet*2;
+            txtWin.setText(String.valueOf(iTotalBet*2));
+            txtWin.setVisibility(View.VISIBLE);
         }else if (iPlayerPoint == 21 && iDilarPoint != 21){
             imgTextLost.setImageResource(R.drawable.won);
             imgTextLost.setVisibility(View.VISIBLE);
             iCredit = iCredit+iTotalBet*2;
+
+            txtWin.setText(String.valueOf(iTotalBet*2));
+            txtWin.setVisibility(View.VISIBLE);
         }
         startGame.setVisibility(View.VISIBLE);
         btnDouble.setVisibility(View.INVISIBLE);

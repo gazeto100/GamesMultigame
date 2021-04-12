@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/blackjack3"
+    android:configChanges="orientation"
+    android:screenOrientation="portrait"
     tools:context=".MainActivity">
 
     <Button
@@ -48,8 +50,8 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginBottom="88dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
         android:contentDescription="@string/coin1"
@@ -63,8 +65,8 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginBottom="88dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
         android:contentDescription="@string/coin5"
@@ -100,17 +102,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/coin25" />
 
-
-    <ImageView
-        android:id="@+id/btnDeal"
-        android:layout_width="144px"
-        android:layout_height="114px"
-        android:layout_marginBottom="16dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:clickable="true"
-        android:src="@drawable/deal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="190dp" />
 
     <ImageView
         android:id="@+id/dealer1"
@@ -269,9 +260,9 @@
 
     <ImageView
         android:id="@+id/btnHit"
-        android:layout_width="144px"
-        android:layout_height="114px"
-        android:layout_marginBottom="28dp"
+        android:layout_width="75dp"
+        android:layout_height="56dp"
+        android:layout_marginBottom="20dp"
         android:layout_marginEnd="4dp"
         android:layout_marginRight="4dp"
         android:background="?attr/selectableItemBackgroundBorderless"
@@ -282,9 +273,9 @@
 
     <ImageView
         android:id="@+id/btnStand"
-        android:layout_width="144px"
-        android:layout_height="114px"
-        android:layout_marginBottom="16dp"
+        android:layout_width="75dp"
+        android:layout_height="56dp"
+        android:layout_marginBottom="15dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
         android:src="@drawable/stand"
@@ -292,10 +283,22 @@
         tools:layout_editor_absoluteX="190dp" />
 
     <ImageView
+        android:id="@+id/btnDeal"
+        android:layout_width="75dp"
+        android:layout_height="56dp"
+        android:layout_marginBottom="15dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:src="@drawable/deal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="190dp" />
+
+
+    <ImageView
         android:id="@+id/btnDouble"
-        android:layout_width="144px"
-        android:layout_height="114px"
-        android:layout_marginBottom="28dp"
+        android:layout_width="75dp"
+        android:layout_height="56dp"
+        android:layout_marginBottom="20dp"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:background="?attr/selectableItemBackgroundBorderless"
@@ -358,6 +361,17 @@
         android:layout_marginStart="16dp"
         app:layout_constraintBottom_toBottomOf="@+id/player1"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/txtWin"
+        android:layout_width="134dp"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom"
+        android:gravity="center"
+        android:text=""
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgTextlost" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
