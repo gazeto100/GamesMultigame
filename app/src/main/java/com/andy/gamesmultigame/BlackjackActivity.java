@@ -17,17 +17,17 @@ import java.util.Vector;
 public class BlackjackActivity extends Activity implements View.OnClickListener {
 
     TextView txtCredit, txtBet, txtDilarPoint, txtPlayerPoint, txtWin;
-    ImageView btnDeal, btnHit, btnStand, btnDouble;
+    ImageView btnDeal, btnHit, btnStand, btnDouble, btnCansel;
 
-    ImageView imgTextLost, imgTextWon;
+    ImageView imgTextLost, imgRebet, imgTextWon;
 
-    ImageView[] btnCoins = new ImageView[5];
+    ImageView[] btnCoins = new ImageView[4];
 
     int coinValue[] = {1, 5, 10, 25, 100};
 
     Button startGame;
 
-    int iCredit, iBet, iTotalBet, iDilarPoint, iPlayerPoint, currenPoint;
+    int iCredit, iBet, iTotalBet, iDilarPoint, iPlayerPoint, currenBet;
 
     boolean isDeal;
 
@@ -84,9 +84,9 @@ public class BlackjackActivity extends Activity implements View.OnClickListener 
 
         isDeal = false;
 
-        startGame = (Button)findViewById(R.id.btnStart);
-        startGame.setVisibility(View.INVISIBLE);
-        startGame.setOnClickListener(this);
+        //startGame = (Button)findViewById(R.id.btnStart);
+        //startGame.setVisibility(View.INVISIBLE);
+        //startGame.setOnClickListener(this);
 
         for (int i = 0; i<point.length; i++) {
             vCards.add(cards[i]);
@@ -110,13 +110,15 @@ public class BlackjackActivity extends Activity implements View.OnClickListener 
         DilarCardsView[5] = (ImageView) findViewById(R.id.dealer6);
         DilarCardsView[6] = (ImageView) findViewById(R.id.dealer7);
 
-        iCredit = 1000;
+        iCredit = 100;
 
         btnCoins[0] = (ImageView)findViewById(R.id.coin1);
         btnCoins[1] = (ImageView)findViewById(R.id.coin5);
         btnCoins[2] = (ImageView)findViewById(R.id.coin10);
         btnCoins[3] = (ImageView)findViewById(R.id.coin25);
-        btnCoins[4] = (ImageView)findViewById(R.id.coin100);
+        //btnCoins[4] = (ImageView)findViewById(R.id.coin100);
+
+        imgRebet = (ImageView) findViewById(R.id.rebet);
 
         txtBet = (TextView)findViewById(R.id.txtbet);
         txtBet.setTextColor(Color.WHITE);
@@ -147,9 +149,9 @@ public class BlackjackActivity extends Activity implements View.OnClickListener 
         btnStand  = (ImageView) findViewById(R.id.btnStand);
         btnDouble  = (ImageView) findViewById(R.id.btnDouble);
 
-        float xB = (float)(width/2);
-        btnDeal.setX(xB-72);
-        btnStand.setX(xB-72);
+        btnCansel = (ImageView)findViewById(R.id.cansel);
+        btnCansel.setVisibility(View.INVISIBLE);
+        btnCansel.setOnClickListener(this);
 
         btnHit.setOnClickListener(this);
         btnHit.setVisibility(View.INVISIBLE);
@@ -165,6 +167,9 @@ public class BlackjackActivity extends Activity implements View.OnClickListener 
 
         btnDeal.setOnClickListener(this);
         btnDeal.setVisibility(View.INVISIBLE);
+
+        imgRebet.setOnClickListener(this);
+        imgRebet.setVisibility(View.INVISIBLE);
 
         for (int i = 0; i < btnCoins.length; i++){
             btnCoins[i].setOnClickListener(this);
@@ -197,10 +202,24 @@ public class BlackjackActivity extends Activity implements View.OnClickListener 
             if (!bNoMoney) {
                 btnDeal.setVisibility(View.VISIBLE);
             }
+            btnCansel.setVisibility(View.VISIBLE);
         }
 
+        if(v.getId() == btnCansel.getId()){
+            iCredit += iTotalBet;
+            iTotalBet = 0;
+            btnCansel.setVisibility(View.INVISIBLE);
+            txtCredit.setText(String.valueOf(iCredit));
+            txtBet.setText(String.valueOf(iTotalBet));
+        }
+
+        if(v.getId() == imgRebet.getId()){
+            StartNewGame();
+            imgRebet.setVisibility(View.INVISIBLE);
+        }
         if(v.getId() == btnDeal.getId()){
             isDeal = true;
+            currenBet = iTotalBet;
             updateGame();
             //startTimer();
             for (ImageView i: btnCoins){
@@ -228,10 +247,10 @@ public class BlackjackActivity extends Activity implements View.OnClickListener 
             StandLogic();
         }
 
-        if (v.getId() == startGame.getId()){
-            StartNewGame();
-            startGame.setVisibility(View.INVISIBLE);
-        }
+        //if (v.getId() == startGame.getId()){
+        //    StartNewGame();
+        //    startGame.setVisibility(View.INVISIBLE);
+        //}
         //updateCountDownText();
     }
 
@@ -267,7 +286,7 @@ public class BlackjackActivity extends Activity implements View.OnClickListener 
             imgTextLost.setImageResource(R.drawable.lost);
             imgTextLost.setVisibility(View.VISIBLE);
 
-            startGame.setVisibility(View.VISIBLE);
+//            startGame.setVisibility(View.VISIBLE);
 
             int randomIndex = new Random().nextInt(vCards.size());
             dilarPoints.add(vPoint.get(randomIndex));
@@ -275,7 +294,9 @@ public class BlackjackActivity extends Activity implements View.OnClickListener 
             iDilarPoint += vPoint.get(randomIndex);
             DilarCardsView[1].setImageResource(dilarCards.get(1));
             txtDilarPoint.setText(String.valueOf(iDilarPoint));
-            return;
+
+            imgRebet.setVisibility(View.VISIBLE);
+
         }
     }
 
@@ -438,7 +459,7 @@ public class BlackjackActivity extends Activity implements View.OnClickListener 
             imgTextLost.setVisibility(View.VISIBLE);
             iCredit = iCredit+iTotalBet*2;
         }
-        startGame.setVisibility(View.VISIBLE);
+        imgRebet.setVisibility(View.VISIBLE);
         btnDouble.setVisibility(View.INVISIBLE);
         btnHit.setVisibility(View.INVISIBLE);
         btnStand.setVisibility(View.INVISIBLE);
